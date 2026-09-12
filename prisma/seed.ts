@@ -634,8 +634,13 @@ async function main() {
         title: "Taze Bahçe Gıda, ambalaj maliyetlerini %34 azalttı",
         summary:
           "Gıda markası, tedarikçi konsolidasyonu ve standart kutu boyutlarına geçişle önemli bir maliyet avantajı sağladı.",
-        body:
-          "Taze Bahçe Gıda, dağınık tedarikçi ilişkilerini tek bir platform üzerinden yönetmeye başladıktan sonra, benzer özellikli kutuları karşılaştırarak daha uygun fiyatlı tedarikçilere geçiş yaptı. Standartlaştırılmış kutu boyutları sayesinde nakliye doluluk oranı da arttı.",
+        body: `Taze Bahçe Gıda, İstanbul merkezli orta ölçekli bir gıda markası olarak, e-ticaret sevkiyatları için beş farklı bölgesel tedarikçiden dağınık şekilde karton kutu ve dolgu malzemesi satın alıyordu. Her tedarikçiyle ayrı ayrı fiyat görüşmesi yapmak ve teslim sürelerini takip etmek satın alma ekibinin önemli bir zamanını alıyordu.
+
+## Süreç
+Ekip, Sürdürülebilir Market üzerinden benzer özellikli (aynı FEFCO tipi, benzer geri dönüşüm içeriği) karton kutuları tek ekrandan karşılaştırdı. Üç farklı tedarikçiden numune talep ederek dayanıklılık ve baskı kalitesini yerinde test etti.
+
+## Sonuç
+Karşılaştırma sonucunda iki tedarikçiye konsolide oldular ve nakliye sırasında kutu boyutlarını standartlaştırarak palet doluluk oranını artırdılar. Tedarikçi sayısının azalması, birim başına pazarlık gücünü de artırdı. Toplamda ambalaj maliyetlerinde %34 azalma sağlandı; bu rakam, konsolidasyon öncesi ve sonrası üç aylık ortalama birim maliyet karşılaştırmasına dayanmaktadır.`,
         metricLabel: "Ambalaj maliyeti azalması",
         metricValue: "%34",
       },
@@ -644,8 +649,13 @@ async function main() {
         title: "Anadolu Kozmetik, tedarikçi bulma süresini haftalardan günlere indirdi",
         summary:
           "Kozmetik markası, biyobozunur ambalaj arayışında birden fazla tedarikçiyi aynı anda değerlendirebildi.",
-        body:
-          "Daha önce e-posta ve telefonla yürütülen tedarikçi araştırması, katalog üzerinden filtreleme ile saatler içine indi. Numune talep akışı sayesinde karar verme süreci de hızlandı.",
+        body: `Ankara merkezli Anadolu Kozmetik, ürün gamını plastiksiz ve kompostlanabilir ambalaja geçirmeyi planlıyordu, ancak bu konuda uzmanlaşmış yerli tedarikçi bulmak zordu. Önceki süreçte tedarikçi araştırması e-posta ve telefon görüşmeleriyle yürütülüyor, her biriyle ayrı ayrı teknik özellik netleştirmek haftalar sürüyordu.
+
+## Süreç
+Platform üzerinden "Kompostlanabilir" ve "Plastiksiz" etiketli ürünleri filtreleyerek üç farklı tedarikçiyi aynı anda değerlendirdiler. Her tedarikçiden numune talebi gönderip malzeme performansını (nem direnci, kapatma kalitesi) kendi laboratuvarlarında karşılaştırdılar.
+
+## Sonuç
+Tedarikçi bulma ve ilk numune değerlendirme süreci, önceki haftalar mertebesinden yaklaşık 3 güne indi. Ekip, seçtikleri tedarikçiyle EN 13432 sertifikasını ve tedarik zinciri detaylarını doğrudan panel üzerinden gönderilen taleple netleştirdi.`,
         metricLabel: "Tedarikçi bulma süresi",
         metricValue: "Haftalardan 3 güne",
       },
@@ -732,34 +742,61 @@ Sertifikanın hangi kapsamı belgelediğini anlayın (malzeme mi, süreç mi, te
         order: 1,
         question: "Platform üzerinden doğrudan ödeme yapabilir miyim?",
         answer:
-          "Şu an için platform, alıcı ve tedarikçiyi teklif/numune talebi üzerinden buluşturuyor; ödeme ve sözleşme süreçleri taraflar arasında doğrudan yürütülüyor.",
+          "Hayır — platform, alıcı ve tedarikçiyi teklif/numune talebi üzerinden buluşturan bir eşleştirme hizmetidir. Ödeme, sözleşme ve teslimat şartları taraflar arasında doğrudan yürütülür; Sürdürülebilir Market bu işlemin tarafı değildir. Bu yaklaşım, tedarikçilerin kendi ödeme koşullarını (vade, para birimi, teslim şekli) esnek şekilde sunabilmesini sağlar.",
       },
       {
         order: 2,
         question: "Tedarikçi olarak nasıl katalog oluşturabilirim?",
-        answer: "Tedarikçi panelinden ürünlerinizi ekleyebilir, sertifikalarınızı ve fiyat bandınızı belirtebilirsiniz.",
+        answer:
+          "Önce /tedarikci-ol sayfasından firma hesabınızı oluşturursunuz. Ardından tedarikçi panelinizden ürün ekleyebilir; her ürün için kategori, malzeme, boyut, minimum sipariş miktarı, teslim süresi, fiyat bandı ve sürdürülebilirlik etiketlerini girebilirsiniz. Ürününüz kaydedildiği anda katalogda ve arama sonuçlarında görünür hale gelir.",
       },
       {
         order: 3,
         question: "Sertifikalar gerçek akreditasyon kurumlarından mı?",
         answer:
-          "Bu demo sürümdeki sertifikalar temsili örneklerdir; gerçek kullanımda tedarikçilerin güncel ve doğrulanabilir belgeleri sisteme yüklemesi beklenir.",
+          "Bu erken sürümdeki sertifikalar temsili örneklerdir ve açıkça \"(örnek)\" etiketiyle işaretlenmiştir. Gerçek kullanımda tedarikçilerin FSC, EN 13432 gibi güncel ve doğrulanabilir belgelerini sisteme yüklemesi ve alıcıların bu belgeleri talep edebilmesi beklenir. Sertifikaların öz beyan mı yoksa üçüncü taraf doğrulamalı mı olduğunu değerlendirirken Sürdürülebilirlik sayfamızdaki rehbere bakabilirsiniz.",
       },
       {
         order: 4,
         question: "Minimum sipariş miktarının altında sipariş verebilir miyim?",
-        answer: "Bu genellikle tedarikçiye bağlıdır; teklif talebi sırasında ihtiyacınızı belirterek esneklik olup olmadığını sorabilirsiniz.",
+        answer:
+          "Bu genellikle tedarikçiye ve malzeme türüne bağlıdır; kalıp/baskı maliyeti yüksek ürünlerde (örn. özel baskılı kutular) minimum miktar daha katı olabilirken, stoktan satılan standart ürünlerde esneklik daha olasıdır. Teklif talebi gönderirken ihtiyacınızı ve esneklik beklentinizi mesaj alanında belirtmenizi öneririz.",
       },
       {
         order: 5,
         question: "Uyumluluk/raporlama modülü hangi mevzuatı kapsıyor?",
         answer:
-          "Bu modül, Türkiye'deki ambalaj atığı ve genişletilmiş üretici sorumluluğu çerçevesine genel ve temsili bir bakış sunar; bağlayıcı hukuki danışmanlık yerine geçmez.",
+          "Bu modül; Türkiye'deki Genişletilmiş Üretici Sorumluluğu (GÜS) çerçevesi, Depozito Yönetim Sistemi (DYS) ve AB'nin PPWR düzenlemesiyle karşılaştırmasına genel ve güncel bir bakış sunar. Detaylar için Sürdürülebilirlik sayfamıza bakabilirsiniz; ancak bu içerik bağlayıcı hukuki danışmanlık yerine geçmez ve güncel mevzuat için resmi kurumlara başvurulmalıdır.",
       },
       {
         order: 6,
         question: "Numune talebi ne kadar sürede yanıtlanır?",
-        answer: "Yanıt süresi tedarikçiye göre değişir; talep durumunuzu alıcı panelinizden takip edebilirsiniz.",
+        answer:
+          "Yanıt süresi tedarikçiye ve ürünün stok durumuna göre değişir; talebinizin durumunu (Beklemede / Yanıtlandı / Kabul Edildi / Reddedildi) alıcı panelinizden gerçek zamanlı takip edebilirsiniz.",
+      },
+      {
+        order: 7,
+        question: "Ürün sayfasındaki karbon ayak izi ve geri dönüştürülebilirlik notu nasıl hesaplanıyor?",
+        answer:
+          "Bu değerler, ürünün malzeme türü, birim ağırlığı ve geri dönüştürülmüş içerik oranına dayalı basitleştirilmiş bir tahmindir; bağımsız bir yaşam döngüsü değerlendirmesinin (LCA) yerine geçmez. Amacı, alıcıların ürünleri hızlıca kıyaslayabilmesi için bir başlangıç noktası sunmaktır. Bağlayıcı bir karar öncesinde tedarikçiden ürüne özel LCA raporu talep etmenizi öneririz.",
+      },
+      {
+        order: 8,
+        question: "Birden fazla tedarikçiden aynı anda teklif isteyebilir miyim?",
+        answer:
+          "Evet. Pazar yerinde farklı tedarikçilere ait benzer ürünleri karşılaştırıp her birine ayrı ayrı teklif talebi gönderebilirsiniz; tüm talepleriniz alıcı panelinizde tek listede görünür.",
+      },
+      {
+        order: 9,
+        question: "Tedarikçi olarak gelen bir talebi nasıl reddederim veya yanıtlarım?",
+        answer:
+          "Tedarikçi panelinizdeki \"Gelen Talepler\" sayfasında her talebin yanında durumunu güncelleyebileceğiniz butonlar bulunur (Yanıtlandı, Kabul Edildi veya Reddedildi olarak işaretleme). Bu güncelleme anında alıcının panelinde de yansır.",
+      },
+      {
+        order: 10,
+        question: "Verilerim ve iletişim bilgilerim kimlerle paylaşılıyor?",
+        answer:
+          "Bir teklif/numune talebi gönderdiğinizde, yalnızca talebe konu bilgiler (miktar, mesaj, iletişim bilgileriniz) ilgili tedarikçiyle paylaşılır. Detaylar için Gizlilik Politikamıza bakabilirsiniz.",
       },
     ],
   });
