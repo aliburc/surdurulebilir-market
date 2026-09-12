@@ -629,28 +629,65 @@ async function main() {
   await db.knowledgeArticle.createMany({
     data: [
       {
-        slug: "turkiyede-ambalaj-atigi-mevzuatina-giris",
-        title: "Türkiye'de Ambalaj Atığı Mevzuatına Genel Bir Bakış",
-        excerpt: "Genişletilmiş üretici sorumluluğu kapsamında markaların bilmesi gereken temel kavramlar.",
-        body:
-          "Bu içerik, Türkiye'deki ambalaj atığı yönetimi çerçevesine genel bir giriş sunar ve temsili örnekler içerir; güncel ve bağlayıcı mevzuat için ilgili resmi kurumlara ve hukuk danışmanlarına başvurulmalıdır.",
-        category: "Mevzuat",
+        slug: "yasam-dongusu-perspektifi-neden-onemli",
+        title: "Yaşam Döngüsü Perspektifi Neden Önemli?",
+        excerpt:
+          "\"Hangi ambalaj daha sürdürülebilir?\" sorusunun tek kelimelik bir cevabı yok — doğru cevap, o ambalajın tüm yaşam döngüsüne bakmayı gerektiriyor.",
+        body: `Bir ambalaj markete gelene kadar birçok aşamadan geçer: hammadde çıkarımı, üretim, baskı, taşıma, kullanım ve kullanım ömrü sonu (geri dönüşüm, kompostlama veya depolama). Bir malzemeyi "sürdürülebilir" ya da "sürdürülebilir değil" diye tek bir özelliğine bakarak etiketlemek, bu aşamaların çoğunu görmezden gelmek anlamına gelir. Bu bütüncül bakış açısına yaşam döngüsü değerlendirmesi (Life Cycle Assessment, LCA) denir ve uluslararası olarak ISO 14040 standardıyla tanımlanır.
+
+## Tek bir özellik yeterli bir gösterge değil
+Cam, teorik olarak sonsuz sayıda geri dönüştürülebilir bir malzemedir. Ama aynı zamanda ağırdır; bu da taşıma sırasında daha fazla yakıt tüketimi ve daha yüksek karbon emisyonu anlamına gelebilir. Kağıt hızlı bozunur ve tanıdık bir "doğal" imaj taşır, ama üretimi su ve enerji yoğun olabilir. Tek malzemeli bir plastik poşet, "plastik" olduğu için önyargıyla değerlendirilebilir, ama yerel geri dönüşüm altyapısı gerçekten var olan bir bölgede çok malzemeli bir alternatiften daha düşük toplam etkiye sahip olabilir.
+
+## Sorulması gereken sorular
+Hammadde nereden ve nasıl elde ediliyor (birincil mi, geri dönüştürülmüş mü)? Üretim süreci ne kadar enerji/su yoğun? Ambalajın ağırlığı ve hacmi taşıma etkisini nasıl değiştiriyor? Ürünün gideceği bölgede bu malzemeyi işleyecek gerçek bir altyapı var mı? Ambalaj, ürünün israfını önleyerek dolaylı bir fayda sağlıyor mu?
+
+## Karbon ayak izi, LCA'nın bir çıktısıdır
+Sık duyduğunuz "karbon ayak izi" aslında yaşam döngüsü değerlendirmesinin ürettiği ölçümlerden biridir. Bir ambalaj için tek başına bir karbon rakamı görmek yerine, bu rakamın hangi aşamaları kapsadığını (sadece üretim mi, yoksa taşıma ve kullanım ömrü sonu dahil mi) sormak, rakamın ne kadar güvenilir olduğunu anlamanıza yardımcı olur.
+
+## Mevzuat da bu yöne gidiyor
+AB'nin PPWR (Ambalaj ve Ambalaj Atığı Tüzüğü) düzenlemesi de tam olarak bu bütüncül bakışı zorunlu kılıyor: şirketlerden artık sadece "geri dönüştürülebilir mi" değil, ambalajın ağırlığı, hacmi ve malzeme kaynağı gibi birden fazla veri noktasını raporlamaları isteniyor.`,
+        category: "Sürdürülebilirlik",
       },
       {
-        slug: "geri-donusturulmus-icerik-nasil-dogrulanir",
-        title: "Geri Dönüştürülmüş İçerik Oranı Nasıl Doğrulanır?",
-        excerpt: "Tedarikçi beyanlarını değerlendirirken dikkat edilmesi gereken noktalar.",
-        body:
-          "Geri dönüştürülmüş içerik oranı iddialarını değerlendirirken bağımsız test raporları ve izlenebilirlik belgeleri talep etmek önemlidir. Bu makale, alıcıların tedarikçi seçerken sorabileceği örnek soruları listeler.",
-        category: "Rehber",
+        slug: "geri-donusumun-gercek-orani-nedir",
+        title: "Geri Dönüşümün Gerçek Oranı Nedir?",
+        excerpt:
+          "Türkiye'nin geri dönüşüm oranı hakkında birbirinden farklı rakamlar dolaşıyor. Bu farkın nereden geldiğini ve neden dikkatli okunması gerektiğini açıklıyoruz.",
+        body: `"Geri dönüşüm oranı" tek bir sayı gibi görünse de, kaynağa göre çok farklı rakamlarla karşılaşabilirsiniz. Bunun nedeni, farklı kurumların farklı şeyleri ölçmesi ve farklı terimler kullanmasıdır.
+
+## Resmi rakamlar ne diyor
+Sıfır Atık Projesi kapsamında açıklanan verilere göre, Türkiye'de belediye atığı geri kazanım oranı 2017'de %13 iken 2024'te %36,08'e yükseldi; 2035 hedefi %60. Ayrıca 2025'te devreye giren Depozito Yönetim Sistemi (DYS), 0,1-3 litre aralığındaki cam, plastik ve alüminyum ambalajları kapsayarak yılda yaklaşık 25 milyar ambalajın geri kazanımını hedefliyor.
+
+## Sektör kaynakları neden farklı rakam veriyor
+Bazı sektör değerlendirmeleri, Türkiye'nin gerçek "geri dönüşüm" oranını (atığın fiilen yeniden malzemeye dönüştürülme oranı) %11-12 civarında olarak işaret ediyor — dünya ortalamasının (~%20) altında bir seviye. Bu fark büyük ölçüde "geri kazanım" ile "geri dönüşüm" terimlerinin karıştırılmasından kaynaklanıyor: geri kazanım, atığın kaynağında ayrıştırılıp bir sisteme dahil edilmesini kapsayan geniş bir kategori; geri dönüşüm ise o atığın fiilen yeni bir ürüne dönüştürülmesini ifade eden daha dar bir metrik.
+
+## Bunun ambalaj kararlarınıza etkisi
+Bir malzemeyi "geri dönüştürülebilir" olarak etiketlemek teknik olarak doğru olabilir, ama bu, o malzemenin sizin hedef pazarınızda gerçekten geri dönüştürüleceği anlamına gelmez. Ambalaj kararı verirken şunu sormak daha isabetli: "Bu ambalaj, ürünümün gideceği bölgede fiilen işlenebilecek bir altyapıya sahip mi?"
+
+## Tedarikçinize sorabileceğiniz sorular
+Bu malzeme hangi ülkelerde/şehirlerde fiilen geri dönüştürülüyor? Geri dönüşüm oranı hangi kaynağa dayanıyor? Ürün karışık malzemeden mi yoksa tek malzemeden mi üretiliyor — karışık malzemeler genellikle ayrıştırma gerektirdiği için geri dönüşüm oranını düşürür.`,
+        category: "Geri Dönüşüm",
       },
       {
-        slug: "kompostlanabilir-ambalaj-ne-zaman-doğru-secim",
-        title: "Kompostlanabilir Ambalaj Ne Zaman Doğru Seçimdir?",
-        excerpt: "Kompostlanabilir malzemelerin avantaj ve sınırlamaları.",
-        body:
-          "Kompostlanabilir ambalajlar her senaryoda en sürdürülebilir seçenek olmayabilir; yerel atık altyapısının kompost tesislerine erişimi olup olmadığı değerlendirilmelidir.",
-        category: "Rehber",
+        slug: "ambalaj-sertifikalarini-okuma-rehberi",
+        title: "Ambalaj Sertifikalarını Okuma Rehberi",
+        excerpt:
+          "FSC, EN 13432 ve geri dönüşüm sembolleri sık karşılaştığınız ama genelde tam anlaşılmayan işaretler. Ne anlama geldiklerini adım adım açıklıyoruz.",
+        body: `## FSC — orman kaynaklı malzemeler için
+FSC (Forest Stewardship Council) etiketi, kağıt/karton bazlı bir ambalajın sorumlu yönetilen ormanlardan geldiğini gösterir. Üç ana etiket türü vardır: FSC 100% (tamamen sertifikalı ormandan), FSC Recycled (tamamen geri dönüştürülmüş malzemeden) ve FSC Mix (karışım). Bir ambalajın FSC etiketi taşıyabilmesi için, tedarik zincirindeki her kuruluşun ayrıca FSC CoC (Gözetim Zinciri) sertifikasına sahip olması gerekir.
+
+## EN 13432 — endüstriyel kompostlanabilirlik için
+EN 13432 (Türkiye'de TS EN 13432), bir ambalajın endüstriyel kompost tesisinde gerçekten kompostlanabildiğini kanıtlamak için kullanılan standarttır. Bu standarda göre sertifikalanan bir malzeme, ~58°C'lik endüstriyel kompost ortamında 12 hafta içinde fiziksel olarak parçalanmalı ve 6 ay içinde en az %90'ı biyolojik olarak CO₂'ye dönüşmelidir. Önemli nokta: bu standart endüstriyel kompostlama için geçerlidir — ev tipi kompostlama için henüz ortak bir uluslararası standart yoktur.
+
+## Geri dönüşüm üçgeni ve reçine kodları
+Plastik ambalajlarda gördüğünüz numaralı üçgen sembol (1-7 arası) o plastiğin reçine türünü gösterir — tek başına "bu ürün geri dönüştürülür" anlamına gelmez, sadece malzeme ailesini belirtir. Bir plastiğin gerçekten geri dönüştürülüp dönüştürülemeyeceği, o bölgedeki tesisin o reçine türünü işleyip işlemediğine bağlıdır.
+
+## Öz beyan mı, bağımsız sertifika mı?
+Öz beyan (self-declared claim), üreticinin kendi ifadesidir — ambalaj üzerinde "çevre dostu" yazması bağımsız bir denetimden geçtiği anlamına gelmez. Üçüncü taraf sertifikalı bir iddia (FSC, EN 13432 gibi) ise akredite bağımsız bir kuruluş tarafından düzenli denetimlerle doğrulanır.
+
+## Bir sertifikayı gördüğünüzde ne yapmalısınız
+Sertifikanın hangi kapsamı belgelediğini anlayın (malzeme mi, süreç mi, tesis mi?). Koşullu iddialarda hangi koşulun kastedildiğini sorun. Mümkünse tedarikçiden güncel sertifika belgesini isteyin — logo görmek, belgeyi görmekle aynı şey değildir.`,
+        category: "Sertifikasyon",
       },
       {
         slug: "tedarikci-secerken-sorulacak-10-soru",

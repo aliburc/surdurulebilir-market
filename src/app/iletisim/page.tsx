@@ -1,4 +1,5 @@
 import { Mail, MapPin } from "lucide-react";
+import { ContactForm } from "./ContactForm";
 
 export const metadata = { title: "İletişim — Sürdürülebilir Market" };
 
@@ -15,7 +16,7 @@ export default function IletisimPage() {
           <Mail className="mt-0.5 h-5 w-5 text-primary" />
           <div>
             <p className="font-medium">E-posta</p>
-            <p className="text-sm text-muted-foreground">merhaba@surdurulebilirmarket.com</p>
+            <p className="text-sm text-muted-foreground">Aşağıdaki formu kullanın</p>
           </div>
         </div>
         <div className="flex items-start gap-3 rounded-xl border border-border bg-card p-5">
@@ -27,8 +28,11 @@ export default function IletisimPage() {
         </div>
       </div>
 
+      <div className="mt-10 rounded-2xl border border-border bg-card p-6 sm:p-8">
+        <ContactForm />
+      </div>
+
       <p className="mt-8 rounded-xl border border-border bg-muted/40 p-4 text-sm text-muted-foreground">
-        Bu bir demo platformdur; iletişim formu gönderim işlevi bu sürümde aktif değildir.
         Katalog ve teklif akışını denemek için{" "}
         <a href="/giris" className="text-primary underline underline-offset-4">
           demo hesaplarıyla giriş yapabilirsiniz

@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { Leaf } from "lucide-react";
+import { NewsletterForm } from "./NewsletterForm";
 
 const COLUMNS = [
   {
@@ -16,14 +17,16 @@ const COLUMNS = [
       { href: "/bilgi-merkezi", label: "Bilgi Merkezi" },
       { href: "/hakkimizda", label: "Hakkımızda" },
       { href: "/iletisim", label: "İletişim" },
+      { href: "/tedarikci-ol", label: "Tedarikçi Olarak Kayıt Ol" },
     ],
   },
   {
-    title: "Kategoriler",
+    title: "Kurumsal",
     links: [
-      { href: "/pazar-yeri?category=Karton%20Kutu", label: "Karton Kutu" },
-      { href: "/pazar-yeri?category=Cam%20%C5%9Ei%C5%9Fe%20%2F%20Kavanoz", label: "Cam Ambalaj" },
-      { href: "/pazar-yeri?category=Ka%C4%9F%C4%B1t%20Poşet", label: "Kağıt Poşet" },
+      { href: "/gizlilik-politikasi", label: "Gizlilik Politikası" },
+      { href: "/kullanim-sartlari", label: "Kullanım Şartları" },
+      { href: "/satici-kosullari", label: "Satıcı Koşulları" },
+      { href: "/cerez-politikasi", label: "Çerez Politikası" },
     ],
   },
 ];
@@ -32,7 +35,17 @@ export function Footer() {
   return (
     <footer className="border-t border-border bg-muted/30">
       <div className="mx-auto max-w-7xl px-6 py-14">
-        <div className="grid grid-cols-2 gap-10 md:grid-cols-5">
+        <div className="flex flex-col items-start justify-between gap-4 rounded-2xl border border-border bg-card p-6 sm:flex-row sm:items-center">
+          <div>
+            <p className="font-semibold">Ambalaj dünyasındaki gelişmeleri takip edin.</p>
+            <p className="mt-0.5 text-sm text-muted-foreground">
+              Yeni kategoriler, mevzuat güncellemeleri ve rehberler için abone olun.
+            </p>
+          </div>
+          <NewsletterForm />
+        </div>
+
+        <div className="mt-12 grid grid-cols-2 gap-10 md:grid-cols-5">
           <div className="col-span-2">
             <div className="flex items-center gap-2 font-semibold tracking-tight">
               <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-primary text-primary-foreground">
