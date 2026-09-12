@@ -81,6 +81,29 @@ export async function getCatalogItemBySlug(slug: string) {
   });
 }
 
+export async function getCategoryOverview() {
+  const items = await db.catalogItem.findMany({
+    where: { status: "active" },
+    select: { category: true, supplier: { select: { companyName: true, slug: true } } },
+  });
+
+  const map = new Map<string, { count: number; suppliers: Map<string, string> }>();
+  for (const item of items) {
+    const entry = map.get(item.category) ?? { count: 0, suppliers: new Map() };
+    entry.count += 1;
+    entry.suppliers.set(item.supplier.slug, item.supplier.companyName);
+    map.set(item.category, entry);
+  }
+
+  return Array.from(map.entries()).map(([category, { count, suppliers }]) => ({
+    category,
+    itemCount: count,
+    suppliers: Array.from(suppliers.entries())
+      .slice(0, 3)
+      .map(([slug, companyName]) => ({ slug, companyName })),
+  }));
+}
+
 export async function getHomeMetrics() {
   const [supplierCount, itemCount, buyerCount] = await Promise.all([
     db.supplier.count(),
