@@ -1,0 +1,165 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  BUYER
+  SUPPLIER
+}
+
+enum RequestType {
+  QUOTE
+  SAMPLE
+}
+
+enum RequestStatus {
+  PENDING
+  RESPONDED
+  ACCEPTED
+  DECLINED
+}
+
+model User {
+  id           String    @id @default(cuid())
+  email        String    @unique
+  passwordHash String
+  role         Role
+  createdAt    DateTime  @default(now())
+  buyer        Buyer?
+  supplier     Supplier?
+}
+
+model Supplier {
+  id                  String          @id @default(cuid())
+  userId              String          @unique
+  user                User            @relation(fields: [userId], references: [id])
+  companyName         String
+  slug                String          @unique
+  city                String
+  region              String
+  foundedYear         Int?
+  description         String @db.Text
+  logoInitials        String
+  logoColor           String
+  sustainabilityScore Int
+  contactName         String
+  contactEmail        String
+  catalogItems        CatalogItem[]
+  certifications      SupplierCertification[]
+}
+
+model Buyer {
+  id           String         @id @default(cuid())
+  userId       String         @unique
+  user         User           @relation(fields: [userId], references: [id])
+  companyName  String
+  sector       String
+  city         String
+  contactName  String
+  contactEmail String
+  requests     QuoteRequest[]
+}
+
+model CatalogItem {
+  id                     String          @id @default(cuid())
+  supplierId             String
+  supplier               Supplier        @relation(fields: [supplierId], references: [id])
+  name                   String
+  sku                    String          @unique
+  slug                   String          @unique
+  category               String
+  material               String
+  recycledContentPercent Int?
+  weightGrams            Int?
+  dimensions             String
+  minOrderQuantity       Int
+  unitPriceMinTRY        Float?
+  unitPriceMaxTRY        Float?
+  leadTimeDays           Int
+  imageColor             String
+  sustainabilityTags     String
+  description            String              @db.Text
+  status                 String          @default("active")
+  requests               QuoteRequest[]
+  certifications         ItemCertification[]
+}
+
+model Certification {
+  id           String                  @id @default(cuid())
+  name         String                  @unique
+  issuingBody  String
+  description  String                  @db.Text
+  suppliers    SupplierCertification[]
+  catalogItems ItemCertification[]
+}
+
+model SupplierCertification {
+  supplierId      String
+  supplier        Supplier      @relation(fields: [supplierId], references: [id])
+  certificationId String
+  certification   Certification @relation(fields: [certificationId], references: [id])
+
+  @@id([supplierId, certificationId])
+}
+
+model ItemCertification {
+  catalogItemId   String
+  catalogItem     CatalogItem   @relation(fields: [catalogItemId], references: [id])
+  certificationId String
+  certification   Certification @relation(fields: [certificationId], references: [id])
+
+  @@id([catalogItemId, certificationId])
+}
+
+model QuoteRequest {
+  id            String        @id @default(cuid())
+  buyerId       String
+  buyer         Buyer         @relation(fields: [buyerId], references: [id])
+  catalogItemId String
+  catalogItem   CatalogItem   @relation(fields: [catalogItemId], references: [id])
+  type          RequestType
+  quantity      Int
+  message       String?       @db.Text
+  status        RequestStatus @default(PENDING)
+  createdAt     DateTime      @default(now())
+}
+
+model Testimonial {
+  id          String @id @default(cuid())
+  authorName  String
+  authorTitle String
+  companyName String
+  quote       String @db.Text
+}
+
+model CaseStudy {
+  id          String @id @default(cuid())
+  slug        String @unique
+  title       String
+  summary     String @db.Text
+  body        String @db.Text
+  metricLabel String
+  metricValue String
+}
+
+model KnowledgeArticle {
+  id          String   @id @default(cuid())
+  slug        String   @unique
+  title       String
+  excerpt     String @db.Text
+  body        String @db.Text
+  category    String
+  publishedAt DateTime @default(now())
+}
+
+model FaqItem {
+  id       String @id @default(cuid())
+  question String
+  answer   String @db.Text
+  order    Int    @default(0)
+}
