@@ -84,6 +84,9 @@ model CatalogItem {
   imageColor             String
   sustainabilityTags     String
   description            String              @db.Text
+  recyclabilityGrade     String?
+  carbonFootprintGramsCO2e Int?
+  lastVerifiedAt         DateTime?
   status                 String          @default("active")
   requests               QuoteRequest[]
   certifications         ItemCertification[]

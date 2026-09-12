@@ -81,6 +81,14 @@ export async function getCatalogItemBySlug(slug: string) {
   });
 }
 
+export async function getRelatedItems(supplierId: string, excludeItemId: string) {
+  return db.catalogItem.findMany({
+    where: { supplierId, status: "active", id: { not: excludeItemId } },
+    include: { supplier: true },
+    take: 3,
+  });
+}
+
 export async function getCategoryOverview() {
   const items = await db.catalogItem.findMany({
     where: { status: "active" },

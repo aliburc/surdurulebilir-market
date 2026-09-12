@@ -9,6 +9,24 @@ async function hash(pw: string) {
   return bcrypt.hash(pw, 10);
 }
 
+const CARBON_FACTOR_BY_MATERIAL: { match: RegExp; factor: number; grade: string }[] = [
+  { match: /cam/i, factor: 0.55, grade: "B — belediye toplama noktalarından kabul ediliyor" },
+  { match: /pet|plastik|ldpe|hdpe|film/i, factor: 1.9, grade: "B — ayrıştırılmış plastik toplama noktalarından kabul ediliyor" },
+  { match: /kraft|kağıt|karton/i, factor: 0.75, grade: "A — kapıdan toplama (belediye geri dönüşüm kutusu) ile kabul ediliyor" },
+  { match: /mantar|bambu/i, factor: 0.3, grade: "C — özel toplama noktası gerektirir, yaygın altyapı sınırlı" },
+  { match: /nişasta|kompost/i, factor: 0.2, grade: "C — yalnızca endüstriyel kompost tesislerinde işlenebilir" },
+];
+
+function deriveSustainabilityMetrics(material: string, weightGrams: number | null, recycledContentPercent: number | null) {
+  const rule = CARBON_FACTOR_BY_MATERIAL.find((r) => r.match.test(material));
+  const factor = rule?.factor ?? 1.0;
+  const grade = rule?.grade ?? "B — yerel altyapıya bağlı, tedarikçiye danışın";
+  const baseWeight = weightGrams ?? 50;
+  const recycledDiscount = 1 - (recycledContentPercent ?? 0) / 200; // recycled content halves impact at 100%
+  const carbonFootprintGramsCO2e = Math.max(1, Math.round(baseWeight * factor * recycledDiscount));
+  return { recyclabilityGrade: grade, carbonFootprintGramsCO2e };
+}
+
 async function main() {
   console.log("Veritabanı temizleniyor...");
   await db.itemCertification.deleteMany();
@@ -474,6 +492,11 @@ async function main() {
         .replace(/[^a-z0-9]+/g, "-")
         .replace(/(^-|-$)/g, "");
       const sku = `SM-${slug.slice(0, 6).toUpperCase()}-${Math.floor(Math.random() * 9000 + 1000)}`;
+      const { recyclabilityGrade, carbonFootprintGramsCO2e } = deriveSustainabilityMetrics(
+        it.material,
+        it.weightGrams,
+        it.recycledContentPercent
+      );
 
       const item = await db.catalogItem.create({
         data: {
@@ -493,6 +516,9 @@ async function main() {
           imageColor: it.imageColor,
           sustainabilityTags: it.sustainabilityTags,
           description: it.description,
+          recyclabilityGrade,
+          carbonFootprintGramsCO2e,
+          lastVerifiedAt: new Date(Date.now() - Math.floor(Math.random() * 60) * 24 * 60 * 60 * 1000),
         },
       });
       createdItems.push({ id: item.id, slug: item.slug, supplierId: supplier.id });
