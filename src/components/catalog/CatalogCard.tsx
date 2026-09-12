@@ -14,17 +14,19 @@ type CatalogCardItem = {
   unitPriceMaxTRY: number | null;
   imageColor: string;
   sustainabilityTags: string;
-  supplier: { companyName: string; city: string };
+  supplier: { companyName: string; city: string; slug: string };
 };
 
 export function CatalogCard({ item }: { item: CatalogCardItem }) {
   const tags = item.sustainabilityTags.split(",").filter(Boolean);
 
   return (
-    <Link
-      href={`/pazar-yeri/${item.slug}`}
-      className="group flex flex-col rounded-2xl border border-border bg-card p-5 outline-none transition-colors hover:border-primary/40 focus-visible:border-primary/40 focus-visible:ring-3 focus-visible:ring-ring/50"
-    >
+    <div className="group relative flex flex-col rounded-2xl border border-border bg-card p-5 transition-colors hover:border-primary/40">
+      <Link
+        href={`/pazar-yeri/${item.slug}`}
+        className="absolute inset-0 z-0 rounded-2xl outline-none focus-visible:ring-3 focus-visible:ring-ring/50"
+        aria-label={item.name}
+      />
       <div className="relative h-32 overflow-hidden rounded-xl bg-muted">
         <Image
           src={getCategoryImage(item.category)}
@@ -39,7 +41,13 @@ export function CatalogCard({ item }: { item: CatalogCardItem }) {
       </span>
       <h3 className="mt-1 font-semibold group-hover:text-primary">{item.name}</h3>
       <p className="mt-1 text-xs text-muted-foreground">
-        {item.supplier.companyName} · {item.supplier.city}
+        <Link
+          href={`/tedarikciler/${item.supplier.slug}`}
+          className="relative z-10 hover:text-primary hover:underline"
+        >
+          {item.supplier.companyName}
+        </Link>{" "}
+        · {item.supplier.city}
       </p>
       <div className="mt-3 flex flex-wrap gap-1.5">
         {tags.slice(0, 2).map((t) => (
@@ -56,6 +64,6 @@ export function CatalogCard({ item }: { item: CatalogCardItem }) {
           </span>
         ) : null}
       </div>
-    </Link>
+    </div>
   );
 }

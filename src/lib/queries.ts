@@ -30,6 +30,20 @@ export async function getSuppliersSummary() {
   });
 }
 
+export async function getSupplierBySlug(slug: string) {
+  return db.supplier.findUnique({
+    where: { slug },
+    include: {
+      catalogItems: {
+        where: { status: "active" },
+        include: { certifications: { include: { certification: true } } },
+        orderBy: { name: "asc" },
+      },
+      certifications: { include: { certification: true } },
+    },
+  });
+}
+
 export type CatalogFilters = {
   category?: string;
   q?: string;

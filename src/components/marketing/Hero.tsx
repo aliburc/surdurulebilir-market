@@ -4,7 +4,16 @@ import { Button } from "@/components/ui/button";
 
 export function Hero() {
   return (
-    <section className="border-b border-border bg-gradient-to-b from-accent/40 to-background">
+    <section className="relative overflow-hidden border-b border-border bg-gradient-to-b from-secondary/70 to-background">
+      <div
+        className="absolute inset-0 opacity-[0.4]"
+        style={{
+          backgroundImage:
+            "radial-gradient(circle, oklch(0.4 0.08 195 / 0.18) 1px, transparent 1px)",
+          backgroundSize: "22px 22px",
+          maskImage: "linear-gradient(to bottom, black, transparent)",
+        }}
+      />
       <div className="mx-auto grid max-w-7xl gap-12 px-6 py-20 md:grid-cols-2 md:items-center md:py-28">
         <div>
           <span className="inline-flex items-center gap-2 rounded-full border border-border bg-background px-3 py-1 text-xs font-medium text-muted-foreground">
@@ -39,7 +48,7 @@ export function Hero() {
           <div className="rounded-2xl border border-border bg-card p-5 shadow-sm">
             <div className="flex items-center justify-between border-b border-border pb-3">
               <span className="text-sm font-medium">Geri Dönüştürülmüş Oluklu Karton Kutu</span>
-              <span className="rounded-full bg-accent px-2 py-0.5 text-xs font-medium text-accent-foreground">
+              <span className="rounded-full bg-primary/10 px-2 py-0.5 text-xs font-medium text-primary">
                 Aktif
               </span>
             </div>

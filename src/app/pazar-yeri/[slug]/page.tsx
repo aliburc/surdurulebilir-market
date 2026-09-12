@@ -1,4 +1,5 @@
 import { notFound } from "next/navigation";
+import Link from "next/link";
 import Image from "next/image";
 import { ShieldCheck } from "lucide-react";
 import { getCatalogItemBySlug } from "@/lib/queries";
@@ -38,7 +39,13 @@ export default async function CatalogItemPage({
           </span>
           <h1 className="mt-1 text-2xl font-semibold tracking-tight">{item.name}</h1>
           <p className="mt-1 text-sm text-muted-foreground">
-            {item.supplier.companyName} · {item.supplier.city}, {item.supplier.region}
+            <Link
+              href={`/tedarikciler/${item.supplier.slug}`}
+              className="text-foreground hover:text-primary hover:underline"
+            >
+              {item.supplier.companyName}
+            </Link>{" "}
+            · {item.supplier.city}, {item.supplier.region}
           </p>
 
           <div className="mt-4 flex flex-wrap gap-1.5">
