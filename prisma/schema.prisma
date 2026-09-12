@@ -51,6 +51,7 @@ model Supplier {
   contactEmail        String
   catalogItems        CatalogItem[]
   certifications      SupplierCertification[]
+  materialComponents  MaterialComponent[]
 }
 
 model Buyer {
@@ -90,6 +91,28 @@ model CatalogItem {
   status                 String          @default("active")
   requests               QuoteRequest[]
   certifications         ItemCertification[]
+  components             CatalogItemComponent[]
+}
+
+model MaterialComponent {
+  id             String                    @id @default(cuid())
+  supplierId     String
+  supplier       Supplier                  @relation(fields: [supplierId], references: [id])
+  name           String
+  spec           String
+  recyclability  String
+  sourceType     String
+  catalogItems   CatalogItemComponent[]
+}
+
+model CatalogItemComponent {
+  catalogItemId       String
+  catalogItem         CatalogItem       @relation(fields: [catalogItemId], references: [id])
+  materialComponentId String
+  materialComponent   MaterialComponent @relation(fields: [materialComponentId], references: [id])
+  role                String
+
+  @@id([catalogItemId, materialComponentId])
 }
 
 model Certification {

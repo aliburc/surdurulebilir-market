@@ -31,6 +31,8 @@ async function main() {
   console.log("Veritabanı temizleniyor...");
   await db.itemCertification.deleteMany();
   await db.supplierCertification.deleteMany();
+  await db.catalogItemComponent.deleteMany();
+  await db.materialComponent.deleteMany();
   await db.quoteRequest.deleteMany();
   await db.catalogItem.deleteMany();
   await db.certification.deleteMany();
@@ -450,7 +452,7 @@ async function main() {
   ];
 
   const createdSuppliers: { id: string; slug: string }[] = [];
-  const createdItems: { id: string; slug: string; supplierId: string }[] = [];
+  const createdItems: { id: string; slug: string; supplierId: string; name: string }[] = [];
 
   for (const s of supplierDefs) {
     const user = await db.user.create({
@@ -521,7 +523,7 @@ async function main() {
           lastVerifiedAt: new Date(Date.now() - Math.floor(Math.random() * 60) * 24 * 60 * 60 * 1000),
         },
       });
-      createdItems.push({ id: item.id, slug: item.slug, supplierId: supplier.id });
+      createdItems.push({ id: item.id, slug: item.slug, supplierId: supplier.id, name: item.name });
 
       for (const certName of it.certifications) {
         await db.itemCertification.create({
@@ -537,6 +539,96 @@ async function main() {
         certificationId: certByName("Karbon Ayak İzi Beyan Formu (örnek)").id,
       },
     });
+  }
+
+  console.log("Paylaşılan malzeme bileşeni kayıtları oluşturuluyor...");
+  const findItem = (name: string) => {
+    const found = createdItems.find((i) => i.name === name);
+    if (!found) throw new Error(`Seed hatası: ürün bulunamadı: ${name}`);
+    return found;
+  };
+  const findSupplier = (slug: string) => {
+    const found = createdSuppliers.find((s) => s.slug === slug);
+    if (!found) throw new Error(`Seed hatası: tedarikçi bulunamadı: ${slug}`);
+    return found;
+  };
+
+  const componentDefs: {
+    supplierSlug: string;
+    name: string;
+    spec: string;
+    recyclability: string;
+    sourceType: string;
+    usedBy: { itemName: string; role: string }[];
+  }[] = [
+    {
+      supplierSlug: "yesilpak-ambalaj",
+      name: "Geri Dönüştürülmüş Oluklu Karton",
+      spec: "B dalga, %90 PCR",
+      recyclability: "A — kapıdan toplama ile kabul ediliyor",
+      sourceType: "Geri dönüştürülmüş",
+      usedBy: [
+        { itemName: "Geri Dönüştürülmüş Oluklu Karton Kutu, Orta Boy", role: "Ana gövde" },
+        { itemName: "Oluklu Karton Şarap Bölmeli Kutu", role: "Ana gövde" },
+      ],
+    },
+    {
+      supplierSlug: "yesilpak-ambalaj",
+      name: "Su Bazlı Yapıştırıcı",
+      spec: "Çözücü içermez",
+      recyclability: "Ayrıştırma gerektirmez",
+      sourceType: "Sentetik olmayan",
+      usedBy: [
+        { itemName: "Geri Dönüştürülmüş Oluklu Karton Kutu, Orta Boy", role: "Birleştirme" },
+        { itemName: "Oluklu Karton Şarap Bölmeli Kutu", role: "Birleştirme" },
+      ],
+    },
+    {
+      supplierSlug: "yesilpak-ambalaj",
+      name: "Geri Dönüştürülmüş Kraft Kağıt",
+      spec: "%80 PCR",
+      recyclability: "A — kapıdan toplama ile kabul ediliyor",
+      sourceType: "Geri dönüştürülmüş",
+      usedBy: [{ itemName: "Kraft Kağıt Nakliye Zarfı", role: "Ana gövde" }],
+    },
+    {
+      supplierSlug: "anadolu-surdurulebilir-ambalaj",
+      name: "Geri Dönüştürülmüş Cam",
+      spec: "%60 kırık cam (cullet) içeriği",
+      recyclability: "A — sonsuz döngüsel geri dönüştürülebilir",
+      sourceType: "Geri dönüştürülmüş",
+      usedBy: [
+        { itemName: "Geri Dönüştürülmüş Cam Kavanoz, 250 ml", role: "Ana gövde" },
+        { itemName: "Cam Şişe, 750 ml, Kabartmalı", role: "Ana gövde" },
+      ],
+    },
+    {
+      supplierSlug: "anadolu-surdurulebilir-ambalaj",
+      name: "rPET Reçine",
+      spec: "%100 geri dönüştürülmüş PET",
+      recyclability: "B — ayrıştırılmış plastik toplama noktalarından kabul ediliyor",
+      sourceType: "Geri dönüştürülmüş",
+      usedBy: [{ itemName: "Geri Dönüştürülmüş PET Şişe, 500 ml", role: "Ana gövde" }],
+    },
+  ];
+
+  for (const c of componentDefs) {
+    const supplier = findSupplier(c.supplierSlug);
+    const component = await db.materialComponent.create({
+      data: {
+        supplierId: supplier.id,
+        name: c.name,
+        spec: c.spec,
+        recyclability: c.recyclability,
+        sourceType: c.sourceType,
+      },
+    });
+    for (const u of c.usedBy) {
+      const item = findItem(u.itemName);
+      await db.catalogItemComponent.create({
+        data: { catalogItemId: item.id, materialComponentId: component.id, role: u.role },
+      });
+    }
   }
 
   console.log("Alıcılar oluşturuluyor...");

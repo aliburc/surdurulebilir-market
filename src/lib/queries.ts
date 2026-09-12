@@ -77,7 +77,17 @@ export async function getCatalogCategories() {
 export async function getCatalogItemBySlug(slug: string) {
   return db.catalogItem.findUnique({
     where: { slug },
-    include: { supplier: true, certifications: { include: { certification: true } } },
+    include: {
+      supplier: true,
+      certifications: { include: { certification: true } },
+      components: {
+        include: {
+          materialComponent: {
+            include: { catalogItems: { include: { catalogItem: true } } },
+          },
+        },
+      },
+    },
   });
 }
 

@@ -18,6 +18,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { QuoteRequestModal } from "@/components/catalog/QuoteRequestModal";
 import { CatalogCard } from "@/components/catalog/CatalogCard";
+import { ProductBOMGraph } from "@/components/catalog/ProductBOMGraph";
 
 export default async function CatalogItemPage({
   params,
@@ -43,6 +44,18 @@ export default async function CatalogItemPage({
   if (item.weightGrams != null) {
     recordFields.push({ icon: Package, label: "Birim Ağırlık", value: `${item.weightGrams} g` });
   }
+
+  const bomComponents = item.components.map((c) => ({
+    id: c.materialComponent.id,
+    name: c.materialComponent.name,
+    spec: c.materialComponent.spec,
+    recyclability: c.materialComponent.recyclability,
+    sourceType: c.materialComponent.sourceType,
+    role: c.role,
+    sharedWith: c.materialComponent.catalogItems
+      .filter((ci) => ci.catalogItem.id !== item.id)
+      .map((ci) => ({ slug: ci.catalogItem.slug, name: ci.catalogItem.name })),
+  }));
 
   const ppwrFieldsComplete = [
     item.material,
@@ -191,6 +204,28 @@ export default async function CatalogItemPage({
           <span>Karbon ve geri dönüştürülebilirlik değerleri malzeme türüne dayalı tahminidir; bağımsız LCA raporu değildir.</span>
         </div>
       </div>
+
+      {bomComponents.length > 0 && (
+        <div className="mt-12">
+          <h2 className="text-lg font-semibold">Malzeme Ağı</h2>
+          <p className="mt-1 text-sm text-muted-foreground">
+            Bu ürünü oluşturan malzeme kayıtlarını ve tedarikçiyi keşfetmek için bir düğüme
+            tıklayın.
+          </p>
+          <div className="mt-6">
+            <ProductBOMGraph
+              itemName={item.name}
+              components={bomComponents}
+              supplier={{
+                slug: item.supplier.slug,
+                companyName: item.supplier.companyName,
+                city: item.supplier.city,
+                region: item.supplier.region,
+              }}
+            />
+          </div>
+        </div>
+      )}
 
       {item.certifications.length > 0 && (
         <div className="mt-8">
