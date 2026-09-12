@@ -3,7 +3,6 @@ import { FeatureShowcase } from "@/components/marketing/FeatureShowcase";
 import { HomeNetworkGraph } from "@/components/marketing/HomeNetworkGraph";
 import { TrustBar } from "@/components/marketing/TrustBar";
 import { Metrics } from "@/components/marketing/Metrics";
-import { TestimonialSection } from "@/components/marketing/TestimonialSection";
 import { HowItWorks } from "@/components/marketing/HowItWorks";
 import { ModuleCards } from "@/components/marketing/ModuleCards";
 import { BenefitsSplit } from "@/components/marketing/BenefitsSplit";
@@ -14,26 +13,26 @@ import { CTASection } from "@/components/marketing/CTASection";
 import { FAQAccordion } from "@/components/marketing/FAQAccordion";
 import {
   getHomeMetrics,
-  getTestimonials,
   getCaseStudies,
   getKnowledgeArticles,
   getFaqs,
   getCategoryOverview,
+  getFeaturedItems,
 } from "@/lib/queries";
 
 export default async function Home() {
-  const [metrics, testimonials, caseStudies, articles, faqs, categories] = await Promise.all([
+  const [metrics, caseStudies, articles, faqs, categories, featuredItems] = await Promise.all([
     getHomeMetrics(),
-    getTestimonials(),
     getCaseStudies(),
     getKnowledgeArticles(),
     getFaqs(),
     getCategoryOverview(),
+    getFeaturedItems(),
   ]);
 
   return (
     <>
-      <Hero />
+      <Hero items={featuredItems} />
       <TrustBar />
       <FeatureShowcase />
       <section className="border-y border-border bg-muted/30 py-20">
@@ -55,7 +54,6 @@ export default async function Home() {
       <BenefitsSplit />
       <ComplianceTeaser />
       <CaseStudySection caseStudies={caseStudies} />
-      <TestimonialSection testimonials={testimonials} />
       <KnowledgeHubPreview articles={articles} />
       <FAQAccordion faqs={faqs} />
       <CTASection />

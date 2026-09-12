@@ -1,8 +1,22 @@
 import Link from "next/link";
 import { ArrowRight, PackageCheck } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { HeroPreviewCard } from "./HeroPreviewCard";
 
-export function Hero() {
+type HeroItem = {
+  slug: string;
+  name: string;
+  category: string;
+  material: string;
+  minOrderQuantity: number;
+  leadTimeDays: number;
+  unitPriceMinTRY: number | null;
+  unitPriceMaxTRY: number | null;
+  recycledContentPercent: number | null;
+  supplier: { companyName: string; city: string; sustainabilityScore: number };
+};
+
+export function Hero({ items }: { items: HeroItem[] }) {
   return (
     <section className="relative overflow-hidden border-b border-border bg-gradient-to-b from-secondary/70 to-background">
       <div
@@ -44,36 +58,7 @@ export function Hero() {
           </div>
         </div>
 
-        <div className="relative">
-          <div className="rounded-2xl border border-border bg-card p-5 shadow-sm">
-            <div className="flex items-center justify-between border-b border-border pb-3">
-              <span className="text-sm font-medium">Geri Dönüştürülmüş Oluklu Karton Kutu</span>
-              <span className="rounded-full bg-primary/10 px-2 py-0.5 text-xs font-medium text-primary">
-                Aktif
-              </span>
-            </div>
-            <dl className="mt-3 grid grid-cols-2 gap-y-3 text-sm">
-              <dt className="text-muted-foreground">Malzeme</dt>
-              <dd className="text-right font-medium">Geri dön. oluklu karton</dd>
-              <dt className="text-muted-foreground">Geri Dönüşüm İçeriği</dt>
-              <dd className="text-right font-medium">%90</dd>
-              <dt className="text-muted-foreground">Min. Sipariş</dt>
-              <dd className="text-right font-medium">500 adet</dd>
-              <dt className="text-muted-foreground">Teslim Süresi</dt>
-              <dd className="text-right font-medium">12 gün</dd>
-              <dt className="text-muted-foreground">Fiyat Bandı</dt>
-              <dd className="text-right font-medium">₺6,50 – ₺9,20</dd>
-            </dl>
-            <div className="mt-4 flex items-center justify-between rounded-lg bg-muted px-3 py-2 text-xs text-muted-foreground">
-              <span>YeşilPak Ambalaj A.Ş. · İstanbul</span>
-              <span className="font-medium text-primary">Sürdürülebilirlik: 84/100</span>
-            </div>
-          </div>
-          <div className="absolute -bottom-6 -left-6 hidden rounded-xl border border-border bg-card px-4 py-3 shadow-sm sm:block">
-            <p className="text-xs text-muted-foreground">Ortalama teklif yanıt süresi</p>
-            <p className="text-lg font-semibold text-primary">3 gün</p>
-          </div>
-        </div>
+        <HeroPreviewCard items={items} />
       </div>
     </section>
   );

@@ -1,9 +1,5 @@
 import { db } from "@/lib/db";
 
-export async function getTestimonials() {
-  return db.testimonial.findMany();
-}
-
 export async function getCaseStudies() {
   return db.caseStudy.findMany();
 }
@@ -120,6 +116,15 @@ export async function getCategoryOverview() {
       .slice(0, 3)
       .map(([slug, companyName]) => ({ slug, companyName })),
   }));
+}
+
+export async function getFeaturedItems() {
+  return db.catalogItem.findMany({
+    where: { status: "active" },
+    include: { supplier: true },
+    take: 4,
+    orderBy: { carbonFootprintGramsCO2e: "asc" },
+  });
 }
 
 export async function getHomeMetrics() {
