@@ -19,6 +19,7 @@ import { Button } from "@/components/ui/button";
 import { QuoteRequestModal } from "@/components/catalog/QuoteRequestModal";
 import { CatalogCard } from "@/components/catalog/CatalogCard";
 import { ProductBOMGraph } from "@/components/catalog/ProductBOMGraph";
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 
 export default async function CatalogItemPage({
   params,
@@ -151,101 +152,112 @@ export default async function CatalogItemPage({
         </div>
       </div>
 
-      <div className="mt-12 overflow-hidden rounded-2xl border border-border">
-        <div className="flex flex-wrap items-center justify-between gap-2 border-b border-border bg-muted/40 px-5 py-3">
-          <h2 className="text-sm font-semibold text-foreground">Ürün Kaydı</h2>
-          <span className="text-xs text-muted-foreground">
-            {item.lastVerifiedAt
-              ? `Son doğrulama: ${new Date(item.lastVerifiedAt).toLocaleDateString("tr-TR")}`
-              : "Doğrulama bekleniyor"}
-          </span>
-        </div>
+      <div className="mt-12">
+        <Tabs defaultValue="ozellikler">
+          <TabsList variant="line" className="w-full justify-start border-b border-border">
+            <TabsTrigger value="ozellikler">Özellikler</TabsTrigger>
+            <TabsTrigger value="surdurulebilirlik">Sürdürülebilirlik</TabsTrigger>
+            {bomComponents.length > 0 && <TabsTrigger value="malzeme-agi">Malzeme Ağı</TabsTrigger>}
+            {item.certifications.length > 0 && (
+              <TabsTrigger value="sertifikalar">Sertifikalar</TabsTrigger>
+            )}
+          </TabsList>
 
-        <div className="grid divide-y divide-border sm:grid-cols-2 sm:divide-x sm:divide-y-0 lg:grid-cols-4">
-          {recordFields.map((f) => (
-            <div key={f.label} className="p-4">
-              <f.icon className="h-4 w-4 text-primary" />
-              <p className="mt-2 text-xs text-muted-foreground">{f.label}</p>
-              <p className="mt-0.5 text-sm font-semibold">{f.value}</p>
-            </div>
-          ))}
-        </div>
-
-        <div className="grid divide-y divide-border border-t border-border sm:grid-cols-2 sm:divide-x sm:divide-y-0">
-          {item.recyclabilityGrade && (
-            <div className="p-4">
-              <div className="flex items-center gap-2">
-                <Recycle className="h-4 w-4 text-primary" />
-                <p className="text-xs font-medium text-muted-foreground">Geri Dönüştürülebilirlik Notu</p>
-              </div>
-              <p className="mt-1.5 text-sm font-medium">{item.recyclabilityGrade}</p>
-            </div>
-          )}
-          {item.carbonFootprintGramsCO2e != null && (
-            <div className="p-4">
-              <div className="flex items-center gap-2">
-                <Leaf className="h-4 w-4 text-primary" />
-                <p className="text-xs font-medium text-muted-foreground">
-                  Tahmini Karbon Ayak İzi (A1–A3)
-                </p>
-              </div>
-              <p className="mt-1.5 text-sm font-medium">
-                {item.carbonFootprintGramsCO2e} g CO₂e / adet
-              </p>
-            </div>
-          )}
-        </div>
-
-        <div className="flex flex-wrap items-center justify-between gap-2 border-t border-border bg-muted/20 px-5 py-3 text-xs text-muted-foreground">
-          <span className="flex items-center gap-1.5">
-            <CalendarCheck className="h-3.5 w-3.5" />
-            PPWR raporlama alanları: {ppwrFieldsComplete}/5 dolu
-          </span>
-          <span>Karbon ve geri dönüştürülebilirlik değerleri malzeme türüne dayalı tahminidir; bağımsız LCA raporu değildir.</span>
-        </div>
-      </div>
-
-      {bomComponents.length > 0 && (
-        <div className="mt-12">
-          <h2 className="text-lg font-semibold">Malzeme Ağı</h2>
-          <p className="mt-1 text-sm text-muted-foreground">
-            Bu ürünü oluşturan malzeme kayıtlarını ve tedarikçiyi keşfetmek için bir düğüme
-            tıklayın.
-          </p>
-          <div className="mt-6">
-            <ProductBOMGraph
-              itemName={item.name}
-              components={bomComponents}
-              supplier={{
-                slug: item.supplier.slug,
-                companyName: item.supplier.companyName,
-                city: item.supplier.city,
-                region: item.supplier.region,
-              }}
-            />
-          </div>
-        </div>
-      )}
-
-      {item.certifications.length > 0 && (
-        <div className="mt-8">
-          <h2 className="text-sm font-semibold text-foreground">Sertifikalar</h2>
-          <div className="mt-3 grid gap-3 sm:grid-cols-2">
-            {item.certifications.map((c) => (
-              <div
-                key={c.certificationId}
-                className="flex items-start gap-2.5 rounded-xl border border-border bg-card p-4 text-xs"
-              >
-                <ShieldCheck className="mt-0.5 h-4 w-4 shrink-0 text-primary" />
-                <div>
-                  <p className="font-medium text-foreground">{c.certification.name}</p>
-                  <p className="mt-0.5 text-muted-foreground">{c.certification.issuingBody}</p>
+          <TabsContent value="ozellikler" className="pt-6">
+            <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+              {recordFields.map((f) => (
+                <div key={f.label} className="rounded-xl border border-border bg-card p-4">
+                  <f.icon className="h-4 w-4 text-primary" />
+                  <p className="mt-2 text-xs text-muted-foreground">{f.label}</p>
+                  <p className="mt-0.5 text-sm font-semibold">{f.value}</p>
                 </div>
+              ))}
+            </div>
+          </TabsContent>
+
+          <TabsContent value="surdurulebilirlik" className="pt-6">
+            <div className="overflow-hidden rounded-2xl border border-border">
+              <div className="flex flex-wrap items-center justify-between gap-2 border-b border-border bg-muted/40 px-5 py-3">
+                <h2 className="text-sm font-semibold text-foreground">Ürün Kaydı</h2>
+                <span className="text-xs text-muted-foreground">
+                  {item.lastVerifiedAt
+                    ? `Son doğrulama: ${new Date(item.lastVerifiedAt).toLocaleDateString("tr-TR")}`
+                    : "Doğrulama bekleniyor"}
+                </span>
               </div>
-            ))}
-          </div>
-        </div>
-      )}
+              <div className="grid divide-y divide-border sm:grid-cols-2 sm:divide-x sm:divide-y-0">
+                {item.recyclabilityGrade && (
+                  <div className="p-4">
+                    <div className="flex items-center gap-2">
+                      <Recycle className="h-4 w-4 text-primary" />
+                      <p className="text-xs font-medium text-muted-foreground">Geri Dönüştürülebilirlik Notu</p>
+                    </div>
+                    <p className="mt-1.5 text-sm font-medium">{item.recyclabilityGrade}</p>
+                  </div>
+                )}
+                {item.carbonFootprintGramsCO2e != null && (
+                  <div className="p-4">
+                    <div className="flex items-center gap-2">
+                      <Leaf className="h-4 w-4 text-primary" />
+                      <p className="text-xs font-medium text-muted-foreground">
+                        Tahmini Karbon Ayak İzi (A1–A3)
+                      </p>
+                    </div>
+                    <p className="mt-1.5 text-sm font-medium">
+                      {item.carbonFootprintGramsCO2e} g CO₂e / adet
+                    </p>
+                  </div>
+                )}
+              </div>
+              <div className="flex flex-wrap items-center justify-between gap-2 border-t border-border bg-muted/20 px-5 py-3 text-xs text-muted-foreground">
+                <span className="flex items-center gap-1.5">
+                  <CalendarCheck className="h-3.5 w-3.5" />
+                  PPWR raporlama alanları: {ppwrFieldsComplete}/5 dolu
+                </span>
+                <span>Karbon ve geri dönüştürülebilirlik değerleri malzeme türüne dayalı tahminidir; bağımsız LCA raporu değildir.</span>
+              </div>
+            </div>
+          </TabsContent>
+
+          {bomComponents.length > 0 && (
+            <TabsContent value="malzeme-agi" className="pt-6">
+              <p className="mb-6 text-sm text-muted-foreground">
+                Bu ürünü oluşturan malzeme kayıtlarını ve tedarikçiyi keşfetmek için bir düğüme
+                tıklayın.
+              </p>
+              <ProductBOMGraph
+                itemName={item.name}
+                components={bomComponents}
+                supplier={{
+                  slug: item.supplier.slug,
+                  companyName: item.supplier.companyName,
+                  city: item.supplier.city,
+                  region: item.supplier.region,
+                }}
+              />
+            </TabsContent>
+          )}
+
+          {item.certifications.length > 0 && (
+            <TabsContent value="sertifikalar" className="pt-6">
+              <div className="grid gap-3 sm:grid-cols-2">
+                {item.certifications.map((c) => (
+                  <div
+                    key={c.certificationId}
+                    className="flex items-start gap-2.5 rounded-xl border border-border bg-card p-4 text-xs"
+                  >
+                    <ShieldCheck className="mt-0.5 h-4 w-4 shrink-0 text-primary" />
+                    <div>
+                      <p className="font-medium text-foreground">{c.certification.name}</p>
+                      <p className="mt-0.5 text-muted-foreground">{c.certification.issuingBody}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </TabsContent>
+          )}
+        </Tabs>
+      </div>
 
       {relatedItems.length > 0 && (
         <div className="mt-14 border-t border-border pt-10">

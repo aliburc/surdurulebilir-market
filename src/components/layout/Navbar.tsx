@@ -3,8 +3,10 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
-import { Menu, Leaf } from "lucide-react";
+import { Menu, Leaf, ChevronDown, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { CategoryIcon } from "@/components/catalog/CategoryIcon";
+import { CATALOG_CATEGORIES } from "@/lib/validations";
 import {
   Sheet,
   SheetContent,
@@ -14,7 +16,6 @@ import {
 } from "@/components/ui/sheet";
 
 const NAV_LINKS = [
-  { href: "/pazar-yeri", label: "Pazar Yeri" },
   { href: "/cozumler", label: "Çözümler" },
   { href: "/surdurulebilirlik", label: "Sürdürülebilirlik" },
   { href: "/bilgi-merkezi", label: "Bilgi Merkezi" },
@@ -28,6 +29,7 @@ type NavbarProps = {
 
 export function Navbar({ isLoggedIn, panelHref }: NavbarProps) {
   const [open, setOpen] = useState(false);
+  const [megaOpen, setMegaOpen] = useState(false);
   const pathname = usePathname();
 
   return (
@@ -43,6 +45,56 @@ export function Navbar({ isLoggedIn, panelHref }: NavbarProps) {
         </Link>
 
         <nav className="hidden items-center gap-0.5 md:flex">
+          <div
+            className="relative"
+            onMouseEnter={() => setMegaOpen(true)}
+            onMouseLeave={() => setMegaOpen(false)}
+          >
+            <button
+              type="button"
+              onClick={() => setMegaOpen((v) => !v)}
+              className={`flex items-center gap-1 rounded-md px-3.5 py-2 text-sm transition-colors ${
+                pathname.startsWith("/pazar-yeri")
+                  ? "text-foreground"
+                  : "text-muted-foreground hover:text-foreground"
+              }`}
+              aria-expanded={megaOpen}
+            >
+              Pazar Yeri
+              <ChevronDown className={`h-3.5 w-3.5 transition-transform ${megaOpen ? "rotate-180" : ""}`} />
+            </button>
+            {pathname.startsWith("/pazar-yeri") && (
+              <span className="absolute inset-x-3 -bottom-[1px] h-[2px] rounded-full bg-primary" />
+            )}
+
+            {megaOpen && (
+              <div className="absolute left-1/2 top-full z-50 w-[560px] -translate-x-1/2 pt-3">
+                <div className="grid grid-cols-2 gap-1 rounded-xl border border-border bg-popover p-3 text-popover-foreground shadow-lg">
+                  {CATALOG_CATEGORIES.map((c) => (
+                    <Link
+                      key={c}
+                      href={`/pazar-yeri?category=${encodeURIComponent(c)}`}
+                      onClick={() => setMegaOpen(false)}
+                      className="flex items-center gap-3 rounded-lg p-2.5 transition-colors hover:bg-muted"
+                    >
+                      <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-accent/20">
+                        <CategoryIcon category={c} className="h-4.5 w-4.5 text-primary" />
+                      </span>
+                      <span className="text-sm font-medium">{c}</span>
+                    </Link>
+                  ))}
+                  <Link
+                    href="/pazar-yeri"
+                    onClick={() => setMegaOpen(false)}
+                    className="col-span-2 mt-1 flex items-center justify-center gap-1.5 rounded-lg border border-border py-2.5 text-sm font-medium text-primary hover:bg-muted"
+                  >
+                    Tüm Kategorileri Gör
+                    <ArrowRight className="h-3.5 w-3.5" />
+                  </Link>
+                </div>
+              </div>
+            )}
+          </div>
           {NAV_LINKS.map((l) => {
             const active = pathname === l.href || pathname.startsWith(`${l.href}/`);
             return (
@@ -92,6 +144,13 @@ export function Navbar({ isLoggedIn, panelHref }: NavbarProps) {
               <SheetTitle>Menü</SheetTitle>
             </SheetHeader>
             <nav className="flex flex-col gap-1 px-4">
+              <Link
+                href="/pazar-yeri"
+                onClick={() => setOpen(false)}
+                className="rounded-md px-3 py-3 text-sm font-medium text-foreground hover:bg-muted"
+              >
+                Pazar Yeri
+              </Link>
               {NAV_LINKS.map((l) => (
                 <Link
                   key={l.href}
