@@ -24,6 +24,36 @@ enum RequestStatus {
   DECLINED
 }
 
+enum OrderStatus {
+  AWAITING_PAYMENT
+  ESCROW_HELD
+  PARTIALLY_RELEASED
+  COMPLETED
+  DISPUTED
+  REFUNDED
+  CANCELLED
+}
+
+enum PaymentEventType {
+  CAPTURE
+  PARTIAL_RELEASE
+  FINAL_RELEASE
+  REFUND
+}
+
+enum PaymentEventStatus {
+  PENDING
+  COMPLETED
+  FAILED
+}
+
+enum DisputeStatus {
+  OPEN
+  RESOLVED_BUYER
+  RESOLVED_SUPPLIER
+  RESOLVED_SPLIT
+}
+
 model User {
   id           String    @id @default(cuid())
   email        String    @unique
@@ -32,6 +62,7 @@ model User {
   createdAt    DateTime  @default(now())
   buyer        Buyer?
   supplier     Supplier?
+  disputesRaised Dispute[]
 }
 
 model Supplier {
@@ -52,6 +83,7 @@ model Supplier {
   catalogItems        CatalogItem[]
   certifications      SupplierCertification[]
   materialComponents  MaterialComponent[]
+  orders              Order[]
 }
 
 model Buyer {
@@ -64,6 +96,7 @@ model Buyer {
   contactName  String
   contactEmail String
   requests     QuoteRequest[]
+  orders       Order[]
 }
 
 model CatalogItem {
@@ -92,6 +125,7 @@ model CatalogItem {
   requests               QuoteRequest[]
   certifications         ItemCertification[]
   components             CatalogItemComponent[]
+  orders                 Order[]
 }
 
 model MaterialComponent {
@@ -153,6 +187,7 @@ model QuoteRequest {
   message       String?       @db.Text
   status        RequestStatus @default(PENDING)
   createdAt     DateTime      @default(now())
+  order         Order?
 }
 
 model Testimonial {
@@ -188,4 +223,66 @@ model FaqItem {
   question String
   answer   String @db.Text
   order    Int    @default(0)
+}
+
+/// Represents a committed transaction once a buyer decides to proceed with an
+/// accepted quote. No real payment provider is wired up yet — this model
+/// exists so the escrow/release lifecycle can be built and tested against
+/// real data before a provider (e.g. iyzico Pazaryeri) is integrated.
+model Order {
+  id                     String        @id @default(cuid())
+  quoteRequestId         String        @unique
+  quoteRequest           QuoteRequest  @relation(fields: [quoteRequestId], references: [id])
+  buyerId                String
+  buyer                  Buyer         @relation(fields: [buyerId], references: [id])
+  supplierId             String
+  supplier               Supplier      @relation(fields: [supplierId], references: [id])
+  catalogItemId          String
+  catalogItem            CatalogItem   @relation(fields: [catalogItemId], references: [id])
+  quantity               Int
+  unitPriceTRY           Float
+  totalAmountTRY         Float
+  platformFeeTRY         Float?
+  releasedAmountTRY      Float         @default(0)
+  status                 OrderStatus   @default(AWAITING_PAYMENT)
+  paidAt                 DateTime?
+  productionConfirmedAt  DateTime?
+  deliveryConfirmedAt    DateTime?
+  completedAt            DateTime?
+  cancelledAt            DateTime?
+  createdAt              DateTime      @default(now())
+  updatedAt              DateTime      @updatedAt
+  payments               PaymentEvent[]
+  disputes               Dispute[]
+}
+
+/// A single money-movement event within an order's escrow lifecycle
+/// (capture, partial release, final release, refund). `provider` and
+/// `providerReferenceId` stay null until a real payment provider is
+/// connected; until then these rows document intended events for the
+/// order-status UI without moving any real money.
+model PaymentEvent {
+  id                  String              @id @default(cuid())
+  orderId             String
+  order               Order               @relation(fields: [orderId], references: [id])
+  type                PaymentEventType
+  amountTRY           Float
+  status              PaymentEventStatus  @default(PENDING)
+  provider            String?
+  providerReferenceId String?
+  note                String?             @db.Text
+  createdAt           DateTime            @default(now())
+}
+
+model Dispute {
+  id             String        @id @default(cuid())
+  orderId        String
+  order          Order         @relation(fields: [orderId], references: [id])
+  raisedByUserId String
+  raisedByUser   User          @relation(fields: [raisedByUserId], references: [id])
+  reason         String        @db.Text
+  status         DisputeStatus @default(OPEN)
+  resolutionNote String?       @db.Text
+  createdAt      DateTime      @default(now())
+  resolvedAt     DateTime?
 }
