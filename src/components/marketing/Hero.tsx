@@ -20,7 +20,7 @@ export function Hero({ items }: { items: HeroItem[] }) {
   return (
     <section className="relative overflow-hidden border-b border-border bg-gradient-to-b from-secondary/70 to-background">
       <div
-        className="absolute inset-0 opacity-[0.4]"
+        className="pointer-events-none absolute inset-0 opacity-[0.4]"
         style={{
           backgroundImage:
             "radial-gradient(circle, oklch(0.4 0.08 195 / 0.18) 1px, transparent 1px)",
